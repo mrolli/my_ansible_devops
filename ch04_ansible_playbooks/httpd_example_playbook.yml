@@ -10,7 +10,7 @@
           - httpd
           - httpd-devel
         state: present
-       
+
     - name: Copy configuration files
       copy:
         src: "{{ item.src }}"
