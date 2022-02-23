@@ -16,15 +16,15 @@ Vagrant.configure("2") do |config|
   end
 
   # Application server 1
-  config.vm.define "app1" do |app|
-    app.vm.hostname = "orc-app1.test"
-    app.vm.network :private_network, ip: "192.168.60.4"
+  config.vm.define "ndoejs" do |app|
+    app.vm.hostname = "nodejs.test"
+    app.vm.network :private_network, ip: "192.168.4.4"
   end
 
   # Application server 2
-  config.vm.define "app2" do |app|
-    app.vm.hostname = "orc-app2.test"
-    app.vm.network :private_network, ip: "192.168.60.5"
+  config.vm.define "drupal" do |app|
+    app.vm.hostname = "drupal.test"
+    app.vm.network :private_network, ip: "192.168.4.5"
   end
 
 end
