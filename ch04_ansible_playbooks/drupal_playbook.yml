@@ -46,7 +46,8 @@
           - php7.4-mbstring
           - php7.4-pdo
           - php7.4-mysql
-          - php-apcu
+          - php7.4-xml
+          - php7.4-apcu
           - libpcre3-dev
           - libapache2-mod-php7.4
           - python3-mysqldb
@@ -100,7 +101,7 @@
     - name: Create a MySQL user for Drupal
       mysql_user:
         name: "{{ domain }}"
-        password: "12334"
+        password: "1234"
         priv: "{{ domain }}.*:ALL"
         host: localhost
         state: present
@@ -120,14 +121,21 @@
     - name: Move Composer int globally-accessible location
       command: >
         mv /tmp/composer.phar /usr/local/bin/composer
-        creates=/usr/local/bin/compser
+        creates=/usr/local/bin/composer
+
+    - name: Create cache directory for composer
+      file:
+        path: /var/www/.cache/composer
+        state: directory
+        owner: www-data
+        group: www-data
 
     - name: Ensure Drupal dirctory exists
       file:
         path: "{{ drupal_core_path }}"
         state: directory
         owner: www-data
-        groups: www-data
+        group: www-data
 
     - name: Check if Drupal project already exists.
       stat:
@@ -141,5 +149,25 @@
         working_dir: "{{ drupal_core_path }}"
         no_dev: true
       become_user: www-data
-      when: not drupal_composer_json.exists
+      when: not drupal_composer_json.stat.exists
+
+    - name: Add drush to the Drupal site with Composer
+      composer:
+        command: require
+        arguments: drush/drush:10.*
+        working_dir: "{{ drupal_core_path }}"
+      become_user: www-data
+      when: not drupal_composer_json.stat.exists
+
+    - name: Install Drupal
+      command: >
+        vendor/bin/drush site-install -y --site-name="{{ drupal_site_name }}"
+        --account-name=admin
+        --account-pass=admin
+        --db-url=mysql://{{ domain }}:1234@localhost/{{ domain }}
+        --root={{ drupal_core_path }}
+        chdir={{ drupal_core_path }}
+        creates={{ drupal_core_path }}/web/sites/default/settings.php
+      notify: restart apache
+      become_user: www-data
 
