@@ -15,7 +15,6 @@ Vagrant.configure("2") do |config|
     v.linked_clone = true
   end
 
-  # Application server 1
   config.vm.define "nodejs" do |box|
     box.vm.hostname = "nodejs.test"
     box.vm.network :private_network, ip: "192.168.4.4"
@@ -26,7 +25,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # boxlication server 2
   config.vm.define "drupal" do |box|
     box.vm.box = "geerlingguy/ubuntu2004"
     box.vm.hostname = "drupal.test"
@@ -38,6 +36,20 @@ Vagrant.configure("2") do |config|
     # Ansible provisioner.
     box.vm.provision :ansible do |ansible|
       ansible.playbook = 'drupal_playbook.yml'
+    end
+  end
+
+  config.vm.define "solr" do |box|
+    box.vm.box = "geerlingguy/ubuntu2004"
+    box.vm.hostname = "solr.test"
+    box.vm.network :private_network, ip: "192.168.4.6"
+    box.vm.provider :virtualbox do |v|
+      v.memory = 512
+    end
+
+    # Ansible provisioner.
+    box.vm.provision :ansible do |ansible|
+      ansible.playbook = 'solr_playbook.yml'
     end
   end
 
