@@ -1,0 +1,17 @@
+---
+- hosts: 127.0.0.1
+  gather_facts: no
+
+  vars_prompt:
+    - name: share_user
+      prompt: "What is your username?"
+      default: HansWurst
+        
+    - name: share_pass
+      prompt: "What is your password?"
+      private: yes
+
+  tasks:
+    - name: Print the current system date.
+      ansible.builtin.debug:
+        msg: "{{share_user}} with password {{share_pass}}"
