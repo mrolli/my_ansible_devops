@@ -5,6 +5,7 @@
 
   vars:
     node_apps_location: /usr/local/opt/node
+    foo: bar
 
   tasks:
     - name: Install EPEL repo
@@ -45,3 +46,9 @@
     - name: Start example Node.js app
       command: "/usr/local/bin/forever start {{ node_apps_location }}/app/app.js"
       when: "forever_list.stdout.find(node_apps_location + '/app/app.js') == -1"
+
+    - debug:
+        msg: "Variable 'foo' is set to {{ foo }}"
+
+    - debug:
+        msg: "Variable 'os family' is set to {{ ansible_os_family }}"
