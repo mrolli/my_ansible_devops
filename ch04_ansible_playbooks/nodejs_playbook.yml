@@ -16,10 +16,6 @@
         key: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
         state: present
 
-    - name: Install Remi repo
-      yum:
-        name: "https://rpms.remirepo.net/enterprise/remi-release-8.rpm"
-
     - name: Ensure firwalld is stopped (since this is for testing)
       service: name=firewalld state=stopped
 
