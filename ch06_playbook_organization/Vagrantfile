@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # Turn off vbguest as basebox has guest additions installed
+  config.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
+
+  config.vm.box = "geerlingguy/rockylinux8"
+  config.vm.box_check_update = false
+  config.ssh.insert_key = false
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.provision :hosts, :sync_hosts => true
+  config.vm.provider :virtualbox do |v|
+    v.memory = 512
+    v.linked_clone = true
+  end
+
+  config.vm.define "drupal" do |box|
+    box.vm.box = "geerlingguy/ubuntu2004"
+    box.vm.hostname = "drupal.test"
+    box.vm.network :private_network, ip: "192.168.6.5"
+    box.vm.provider :virtualbox do |v|
+      v.memory = 2048
+    end
+  end
+
+  config.vm.define "nodejs" do |box|
+    box.vm.hostname = "nodejs.test"
+    box.vm.network :private_network, ip: "192.168.6.6"
+    box.vm.provider :virtualbox do |v|
+      v.memory = 2048
+    end
+    # Ansible provisioner.
+
+    box.vm.provision :ansible do |ansible|
+      ansible.playbook = 'nodejs_playbook.yml'
+    end
+  end
+end
