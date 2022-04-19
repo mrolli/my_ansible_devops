@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # Turn off vbguest as basebox has guest additions installed
+  config.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
+
+  config.vm.box = "geerlingguy/rockylinux8"
+  config.vm.box_check_update = false
+  config.ssh.insert_key = false
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.provision :hosts, :sync_hosts => true
+  config.vm.provider :virtualbox do |v|
+    v.memory = 512
+    v.linked_clone = true
+  end
+
+  config.vm.define "lamp" do |box|
+    box.vm.hostname = "lamp.test"
+    box.vm.network :private_network, ip: "192.168.22.5"
+    box.vm.provider :virtualbox do |v|
+      v.memory = 2048
+    end
+    # Ansible provisioner.
+
+    box.vm.provision :ansible do |ansible|
+      ansible.playbook = 'lamp.yml'
+    end
+  end
+end

@@ -1,0 +1,20 @@
+---
+roles:
+  # From Ansible Galaxy, latest versions
+  - name: geerlingguy.firewall
+  - name: geerlingguy.repo-epel
+  - name: geerlingguy.mysql
+  - name: geerlingguy.apache
+  - name: geerlingguy.php
+  - name: geerlingguy.php-mysql
+  - name: geerlingguy.java
+  - name: geerlingguy.solr
+
+  # From GitHub, with a custom name and version
+  #- src: https://github.com/geerlingguy/ansible-role-passenger
+  #  name: passenger
+  #  version: 2.0.0
+
+  # From a web server, with a custom name
+  #- src: https://www.example.com/ansible/roles/my-role-name.tar.gz
+  #  name: my-role
