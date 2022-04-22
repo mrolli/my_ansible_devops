@@ -53,6 +53,7 @@ if (class_exists('Memcached')) {
  */
 function mysql_test_connection($host) {
   $username = 'mycompany_user';
+  $password = 'secret';
   try {
     $db = new PDO(
       'mysql:host=' . $host . ';dbname=mycompany_database',
@@ -91,4 +92,4 @@ function mysql_test_connection($host) {
   <?php endforeach; ?>
   <p>Memcached Connection: <?php print $memcached_result; ?></p>
 </body>
-</html>“
+</html>
