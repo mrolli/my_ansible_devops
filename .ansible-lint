@@ -1,0 +1,27 @@
+---
+# .ansible-lint
+# See
+# https://ansible-lint.readthedocs.io/en/latest/configuring/#configuration-file
+# for details
+#
+# exclude_paths included in this file are parsed relative to this file's
+# location and not relative to the CWD of execution. CLI arguments passed to
+# the --exclude option will be parsed relative to the CWD of execution.
+exclude_paths:
+  - .cache/ # implicit unless exclude_paths is defined in config
+  - .github/
+  - test/fixtures/formatting-before/
+  - test/fixtures/formatting-prettier/
+# parseable: true
+# quiet: true
+# verbosity: 1
+
+# Any rule that has the 'opt-in' tag will not be loaded unless its 'id' is
+# mentioned in the enable_list:
+enable_list:
+  - empty-string-compare # opt-in
+  - no-log-password # opt-in
+  - no-same-owner # opt-in
+  # add yaml here if you want to avoid ignoring yaml checks when yamllint
+  # library is missing. Normally its absence just skips using that rule.
+  - yaml

@@ -1,15 +1,16 @@
+---
 session_name: ansible-devops
 before_Script: ./create_env.sh
 global_options:
   automatic-rename: 'off'
 start_directory: ${PWD}
 windows:
-- window_name: ansible-devops
-  focus: true
-  layout: main-vertical
-  shell_command_before:
-  - conda activate ansible-devops
-  panes:
-  - pane
-  - pane
-  - focus: true
+  - window_name: ansible-devops
+    focus: true
+    layout: main-vertical
+    shell_command_before:
+      - conda activate ansible-devops
+    panes:
+      - pane
+      - pane
+      - focus: true

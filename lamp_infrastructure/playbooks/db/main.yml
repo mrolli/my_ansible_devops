@@ -22,5 +22,3 @@
   roles:
     - geerlingguy.firewall
     - geerlingguy.mysql
-
-
