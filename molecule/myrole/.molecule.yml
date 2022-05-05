@@ -1,0 +1,4 @@
+lint: |
+  set -e
+  yamllint .
+  ansible-lint

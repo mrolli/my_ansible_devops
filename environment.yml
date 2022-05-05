@@ -6,4 +6,5 @@ dependencies:
       - ansible
       - ansible-lint
       - argcomplete
+      - molecule
       - yamllint
