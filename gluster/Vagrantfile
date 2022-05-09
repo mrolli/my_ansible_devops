@@ -1,0 +1,44 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # Base VM OS configuration.
+  config.vm.box = "geerlingguy/centos7"
+  config.vm.box_check_update = false
+  config.ssh.insert_key = false
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+  # Do not automatically update the guest ddtitions
+  config.vbguest.auto_update = false if Vagrant.has_plugin?("vagrant-vbguest")
+
+  # General VirtualBox VM configuration.
+  config.vm.provider :virtualbox do |v|
+    v.memory = 256
+    v.cpus = 1
+    v.linked_clone = true
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--ioapic", "on"]
+  end
+
+  boxes = [
+    { :name => "gluster1", :ip => "192.168.29.2"},
+    { :name => "gluster2", :ip => "192.168.29.3"}
+  ]
+
+  # Provision each of the VMs
+  boxes.each do |opts|
+    config.vm.define opts[:name] do |config|
+      config.vm.hostname = opts[:name]
+      config.vm.network :private_network, ip: opts[:ip]
+
+      # Provison both VMs using Ansible after the last VM is booted.
+      if opts[:name] == "gluster2"
+        config.vm.provision "ansible" do |ansible|
+          ansible.playbook = "playbooks/provision.yml"
+          ansible.inventory_path = "inventory"
+          ansible.limit = "all"
+        end
+      end
+    end
+  end
+
+end
