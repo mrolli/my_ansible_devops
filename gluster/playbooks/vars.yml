@@ -21,5 +21,5 @@ firewall_allowed_udp_ports:
 
 # Gluster configuration
 gluster_mount_dir: /mnt/gluster
-gluster_brick-dir: /srv/gluster/brick
+gluster_brick_dir: /srv/gluster/brick
 gluster_brick_name: gluster
